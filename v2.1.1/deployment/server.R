@@ -1,6 +1,6 @@
-###----------------------------------
-###DAVID'S TZ-ONLY VERSION
-###----------------------------------
+###version number: v2.1.0
+
+###run 'data refresh.R' first to prepare data sets used by this app
 
 #loading packages
 require(lubridate)
@@ -16,45 +16,47 @@ require(DT)
 #data creation date (date data refresh.R was ran)
 data_creation_date <- read_rds(path = './data/data_creation_date.rds')
 
-#latest data collection date
+#latest data collection datef
 data_collection_date <- read_rds(path = './data/data_collection_date.rds')
 
 #loading schoolweeks data
 schoolweeks <- read_rds(path = './data/schoolweeks.rds')
 
 #loading dashboard 1 data
-d1studentmonth <- read_rds(path = './data/d1studentmonthTZonly.rds')
-d1studentquarter <- read_rds(path = './data/d1studentquarterTZonly.rds')
-d1teachermonth <- read_rds(path = './data/d1teachermonthTZonly.rds')
-d1teacherquarter <- read_rds(path = './data/d1teacherquarterTZonly.rds')
+d1studentmonth <- read_rds(path = './data/d1studentmonth.rds')
+d1studentquarter <- read_rds(path = './data/d1studentquarter.rds')
+d1teachermonth <- read_rds(path = './data/d1teachermonth.rds')
+d1teacherquarter <- read_rds(path = './data/d1teacherquarter.rds')
 
 #loading dashboard 2 data
-d2student <- read_rds(path = './data/d2studentTZ.rds')
-d2teacher <- read_rds(path = './data/d2teacherTZ.rds')
+d2student <- read_rds(path = './data/d2student.rds')
+d2teacher <- read_rds(path = './data/d2teacher.rds')
 
 #loading dashboard 3 data
-d3student <- read_rds(path = './data/d3studentTZ.rds')
-d3teacher <- read_rds(path = './data/d3teacherTZ.rds')
+d3student <- read_rds(path = './data/d3student.rds')
+d3teacher <- read_rds(path = './data/d3teacher.rds')
 
 #loading dashboard 4 data
-d4student <- read_rds(path = './data/d4studentTZ.rds')
-d4teacher <- read_rds(path = './data/d4teacherTZ.rds')
+d4student <- read_rds(path = './data/d4student.rds')
+d4teacher <- read_rds(path = './data/d4teacher.rds')
 
 #loading dashboard 5 data
-d5student <- read_rds(path = './data/d5studentTZ.rds')
-d5teacher <- read_rds(path = './data/d5teacherTZ.rds')
+d5student <- read_rds(path = './data/d5student.rds')
+d5teacher <- read_rds(path = './data/d5teacher.rds')
 
 #loading dashboard 6 data
 tanzstudenttotals <- read_rds(path = './data/d6tanzstudent.rds')
+philstudenttotals <- read_rds(path = './data/d6philstudent.rds')
 tanzteachertotals <- read_rds(path = './data/d6tanzteacher.rds')
-d6latestdata <- read_rds(path = './data/latestdataTZonly.rds')
+philteachertotals <- read_rds(path = './data/d6philteacher.rds')
+d6latestdata <- read_rds(path = './data/latestdata.rds')
 
 #loading dashboard 7 data
-d7 <- read_rds(path = './data/d7TZonly.rds')
-d7schoolnames <- read_rds(path = './data/d7schoolnamesTZ.rds')
+d7 <- read_rds(path = './data/d7.rds')
+d7schoolnames <- read_rds(path = './data/d7schoolnames.rds')
 
 #loading auto-scaling data
-plot_height <- read_rds('./data/plot_height_TZ.rds')
+plot_height <- read_rds('./data/plot_height.rds')
 
 #server logic for shiny app
 shinyServer(function(input, output, session) {
@@ -77,16 +79,16 @@ shinyServer(function(input, output, session) {
                         }
                         if(input$d1metric %in% c('HoursWeek', 'UserHoursWeek')) graphdata <- graphdata %>% filter(!is.infinite(HoursWeek) & !is.infinite(UserHoursWeek))
                         y_max <- max(graphdata[, input$d1metric], na.rm = TRUE)
-                        print(graphdata %>%
-                                      ggplot(aes_string(x = res, y = input$d1metric, fill = 'Year')) + 
-                                      geom_bar(stat = 'identity') +
-                                      scale_x_discrete(label = x_labs, drop = FALSE) +
-                                      scale_y_continuous(limits = c(NA, y_max)) +
-                                      facet_wrap(~SchoolName, ncol = 3, scales = 'free') +
-                                      labs(title = paste('Lifetime Usage Tanzania', input$d1user, input$d1metric, input$d1timeperiod),
-                                           caption = paste('"data refresh.R" ran on', as.character(data_creation_date), '| latest data collection date:', data_collection_date)) +
-                                      xlab(label = ifelse(input$d1timeperiod == 'Monthly', 'Month', 'Quarter')))
-                }, height = plot_height[[paste('Tanzania', input$d1user, sep = '_')]])
+                        print(graphdata %>% filter(Country == input$d1country) %>%
+                                ggplot(aes_string(x = res, y = input$d1metric, fill = 'Year')) + 
+                                geom_bar(stat = 'identity') +
+                                scale_x_discrete(label = x_labs, drop = FALSE) +
+                                scale_y_continuous(limits = c(NA, y_max)) +
+                                facet_wrap(~SchoolName, ncol = 3, scales = 'free') +
+                                labs(title = paste('Lifetime Usage', input$d1country, input$d1user, input$d1metric, input$d1timeperiod),
+                                     caption = paste('"data refresh.R" ran on', as.character(data_creation_date), '| latest data collection date:', data_collection_date)) +
+                                xlab(label = ifelse(input$d1timeperiod == 'Monthly', 'Month', 'Quarter')))
+                }, height = plot_height[[paste(input$d1country, input$d1user, sep = '_')]])
         })
         
         ############################
@@ -120,18 +122,18 @@ shinyServer(function(input, output, session) {
                                UserHoursWeek = UserHours/Weeks)
                 y_max <- max(graphdata[, input$d2metric], na.rm = TRUE)
                 output$d2plot <- renderPlot({
-                        print(graphdata %>% 
+                        print(graphdata %>% filter(Country == input$d2country) %>% 
                                       ggplot(aes_string(x = 'Weekday', y = input$d2metric)) + 
                                       geom_bar(stat = 'identity', fill = 'blue') + 
                                       scale_x_discrete(drop = FALSE) +
                                       scale_y_continuous(limits = c(NA, y_max)) +
                                       facet_wrap(~SchoolName, ncol = 3, scales = 'free') +
-                                      labs(title = paste('Weekday Usage Tanzania', input$d2user, input$d2metric, d2startdate, 'to', d2enddate),
+                                      labs(title = paste('Weekday Usage', input$d2country, input$d2user, input$d2metric, d2startdate, 'to', d2enddate),
                                            caption = paste('"data refresh.R" ran on', as.character(data_creation_date), '| latest data collection date:', data_collection_date)) +
                                       xlab(label = 'Weekday'))
-                }, height = plot_height[[paste('Tanzania', input$d2user, sep = '_')]])
-                observeEvent(input$d2csvbutton, write_csv(graphdata, 
-                                                          path = paste('./csv/', today(), 'weekday usage Tanzania', input$d2user, input$d2metric, input$d2date[1], 'to', input$d2date[2], '.csv')))
+                        }, height = plot_height[[paste(input$d2country, input$d2user, sep = '_')]])
+                observeEvent(input$d2csvbutton, write_csv(graphdata %>% filter(Country == input$d2country), 
+                                                          path = paste('./csv/', today(), 'weekday usage', input$d2country, input$d2user, input$d2metric, input$d2date[1], 'to', input$d2date[2], '.csv')))
         })
         
         ############################
@@ -164,18 +166,18 @@ shinyServer(function(input, output, session) {
                                UserHoursWeek = UserHours/Weeks)
                 y_max <- max(graphdata[, input$d3metric], na.rm = TRUE)
                 output$d3plot <- renderPlot({
-                        print(graphdata %>% 
+                        print(graphdata %>% filter(Country == input$d3country) %>% 
                                       ggplot(aes_string(x = 'Hour', y = input$d3metric)) + 
                                       geom_bar(stat = 'identity', fill = 'blue') + 
                                       scale_x_discrete(drop = FALSE) +
                                       scale_y_continuous(limits = c(NA, y_max)) +
                                       facet_wrap(~SchoolName, ncol = 3, scales = 'free') +
-                                      labs(title = paste('Hourly Usage Tanzania', input$d3user, input$d3metric, d3startdate, 'to', d3enddate),
+                                      labs(title = paste('Hourly Usage', input$d3country, input$d3user, input$d3metric, d3startdate, 'to', d3enddate),
                                            caption = paste('"data refresh.R" ran on', as.character(data_creation_date), '| latest data collection date:', data_collection_date)) +
                                       xlab(label = 'Time of Day in Hours (0 == midnight in local time)'))
-                }, height = plot_height[[paste('Tanzania', input$d3user, sep = '_')]])
-                observeEvent(input$d3csvbutton, write_csv(graphdata, 
-                                                          path = paste('./csv/', today(), 'time of day usage Tanzania', input$d3user, input$d3metric, input$d3date[1], 'to', input$d3date[2], '.csv')))
+                }, height = plot_height[[paste(input$d3country, input$d3user, sep = '_')]])
+                observeEvent(input$d3csvbutton, write_csv(graphdata %>% filter(Country == input$d3country), 
+                                                          path = paste('./csv/', today(), 'time of day usage', input$d3country, input$d3user, input$d3metric, input$d3date[1], 'to', input$d3date[2], '.csv')))
         })
         
         ############################
@@ -201,20 +203,20 @@ shinyServer(function(input, output, session) {
                 x_breaks <- seq(1, max(graphdata$NumUsers), 2)
                 y_max <- min(1.15 * input$d4cutoff, max(graphdata$Hours, na.rm = TRUE))
                 output$d4plot <- renderPlot({
-                        suppressWarnings(print(graphdata %>% 
-                                                       ggplot(aes(x = NumUsers, y = PlotHours)) +
-                                                       geom_bar(stat = 'identity', fill = 'blue') +
-                                                       geom_label(aes(label = Flag), size = 3, nudge_y = 0.1 * input$d4cutoff) +
-                                                       scale_x_continuous(breaks = x_breaks, limits = c(NA, max(x_breaks))) +
-                                                       scale_y_continuous(breaks = seq(0, 1000, ifelse(y_max <= 150, 25, 50)), limits = c(NA, y_max)) +
-                                                       facet_wrap(~SchoolName, ncol = 3, scales = 'free') +
-                                                       labs(title = paste('Usage per Number of Users Tanzania', input$d4user, input$d4metric, d4startdate, 'to', d4enddate),
-                                                            caption = paste('"data refresh.R" ran on', as.character(data_creation_date), '| latest data collection date:', data_collection_date)) +
-                                                       xlab(label = 'Number of Users') +
-                                                       ylab(label = 'Hours')))
-                }, height = plot_height[[paste('Tanzania', input$d4user, sep = '_')]])
-                observeEvent(input$d4csvbutton, write_csv(graphdata %>% select(-PlotHours, - Flag), 
-                                                          path = paste('./csv/', today(), 'number of users Tanzania', input$d4user, input$d4date[1], 'to', input$d4date[2], '.csv')))
+                        suppressWarnings(print(graphdata %>% filter(Country == input$d4country) %>%
+                                      ggplot(aes(x = NumUsers, y = PlotHours)) +
+                                      geom_bar(stat = 'identity', fill = 'blue') +
+                                      geom_label(aes(label = Flag), size = 3, nudge_y = 0.1 * input$d4cutoff) +
+                                      scale_x_continuous(breaks = x_breaks, limits = c(NA, max(x_breaks))) +
+                                      scale_y_continuous(breaks = seq(0, 1000, ifelse(y_max <= 150, 25, 50)), limits = c(NA, y_max)) +
+                                      facet_wrap(~SchoolName, ncol = 3, scales = 'free') +
+                                      labs(title = paste('Usage per Number of Users', input$d4country, input$d4user, input$d4metric, d4startdate, 'to', d4enddate),
+                                           caption = paste('"data refresh.R" ran on', as.character(data_creation_date), '| latest data collection date:', data_collection_date)) +
+                                      xlab(label = 'Number of Users') +
+                                      ylab(label = 'Hours')))
+                }, height = plot_height[[paste(input$d4country, input$d4user, sep = '_')]])
+                observeEvent(input$d4csvbutton, write_csv(graphdata %>% select(-PlotHours, - Flag) %>% filter(Country == input$d4country), 
+                                                          path = paste('./csv/', today(), 'number of users', input$d4country, input$d4user, input$d4date[1], 'to', input$d4date[2], '.csv')))
         })
         
         ############################
@@ -249,17 +251,18 @@ shinyServer(function(input, output, session) {
                 y_max <- max(graphdata[, input$d5metric], na.rm = TRUE)
                 output$d5plot <- renderPlot({
                         print(graphdata %>%
+                                      filter(Country == input$d5country) %>%
                                       ggplot(aes_string(x = 'SchoolName', y = input$d5metric)) +
                                       geom_bar(stat = 'identity', fill = 'blue') +
                                       scale_y_continuous(limits = c(NA, y_max)) +
                                       theme(axis.text.x = element_text(angle = 45, hjust = 1)) +  
-                                      labs(title = paste('School Comparison Tanzania', input$d5user, input$d5metric, d5startdate, 'to', d5enddate),
+                                      labs(title = paste('School Comparison', input$d5country, input$d5user, input$d5metric, d5startdate, 'to', d5enddate),
                                            caption = paste('"data refresh.R" ran on', as.character(data_creation_date), '| latest data collection date:', data_collection_date)) +
                                       xlab(label = 'School') +
                                       ylab(label = paste0(input$d5metric, ', max = ', y_max)))
                 })
-                observeEvent(input$d5csvbutton, write_csv(graphdata, 
-                                                          path = paste('./csv/', today(), 'school comparison Tanzania', input$d5user, input$d5metric, input$d5date[1], 'to', input$d5date[2], '.csv')))
+                observeEvent(input$d5csvbutton, write_csv(graphdata %>% filter(Country == input$d5country), 
+                                                          path = paste('./csv/', today(), 'school comparison', input$d5country, input$d5user, input$d5metric, input$d5date[1], 'to', input$d5date[2], '.csv')))
         })
         
         ############################
@@ -270,11 +273,21 @@ shinyServer(function(input, output, session) {
                 tanzstudenttotals
         })
         
+        #PI student totals table
+        output$d6philstudent <- DT::renderDataTable({
+                philstudenttotals
+        })
+        
         #TZ teacher totals table
         output$d6tanzteacher <- DT::renderDataTable({
                 tanzteachertotals
         })
-
+        
+        #PI teacher totals table
+        output$d6philteacher <- DT::renderDataTable({
+                philteachertotals
+        })
+        
         #latest data collection date table
         output$d6latestdata <- DT::renderDataTable({
                 d6latestdata %>% arrange(LatestData)
@@ -282,11 +295,15 @@ shinyServer(function(input, output, session) {
         
         #writing csv files
         path_tz_student_totals <- paste('./csv/', data_creation_date, 'Tanzania student grand totals', '.csv')
+        path_pi_student_totals <- paste('./csv/', data_creation_date, 'Philippines student grand totals', '.csv')
         path_tz_teacher_totals <- paste('./csv/', data_creation_date, 'Tanzania teacher grand totals', '.csv')
+        path_pi_teacher_totals <- paste('./csv/', data_creation_date, 'Philippines teacher grand totals', '.csv')
         path_latest_data <- paste('./csv/', data_creation_date, 'Latest Data Collection Date', '.csv')
-        
+                
         if(!(path_tz_student_totals %in% list.files(path = './csv'))) write_csv(tanzstudenttotals, path = path_tz_student_totals)
+        if(!(path_pi_student_totals %in% list.files(path = './csv'))) write_csv(philstudenttotals, path = path_pi_student_totals)
         if(!(path_tz_teacher_totals %in% list.files(path = './csv'))) write_csv(tanzteachertotals, path = path_tz_teacher_totals)
+        if(!(path_pi_teacher_totals %in% list.files(path = './csv'))) write_csv(philteachertotals, path = path_pi_teacher_totals)
         if(!(path_latest_data %in% list.files(path = './csv'))) write_csv(d6latestdata, path = path_latest_data)
         
         ############################
@@ -339,7 +356,7 @@ shinyServer(function(input, output, session) {
                 }, height = plot_height$d7)
                 
                 output$d7sysadmintable <- DT::renderDataTable({
-                        userusage %>% 
+                        userusage %>%
                                 ungroup() %>%
                                 filter(SysAdmin == 'Yes') %>%
                                 select(-c(UserType, SysAdmin))

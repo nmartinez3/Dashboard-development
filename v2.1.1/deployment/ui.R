@@ -1,6 +1,6 @@
-###----------------------------------
-###DAVID'S TZ-ONLY VERSION
-###----------------------------------
+###version number: v2.1.0
+
+###run 'data refresh.R' first to prepare data sets used by this app
 
 #loading packages
 require(lubridate)
@@ -25,6 +25,8 @@ body <- dashboardBody(
                 tabItem(tabName = 'dashboard1',
                         fluidRow(
                                 box(title = 'Inputs', width = 3, status = 'primary', solidHeader = TRUE,
+                                    selectInput('d1country', 'Country', c('Tanzania',
+                                                                          'Philippines')),
                                     selectInput('d1user', 'User', c('Student' = 'student',
                                                                     'Teacher' = 'teacher')),
                                     selectInput('d1timeperiod', 'Time Period', c('Quarterly' = 'Quarterly',
@@ -43,6 +45,8 @@ body <- dashboardBody(
                 tabItem(tabName = 'dashboard2',
                         fluidRow(
                                 box(title = 'Inputs', width = 3, status = 'primary', solidHeader = TRUE,
+                                    selectInput('d2country', 'Country', c('Tanzania',
+                                                                          'Philippines')),
                                     selectInput('d2user', 'User', c('Student' = 'student',
                                                                     'Teacher' = 'teacher')),
                                     selectInput('d2metric', 'Metric', c('Hours' = 'Hours',
@@ -61,6 +65,8 @@ body <- dashboardBody(
                 tabItem(tabName = 'dashboard3',
                         fluidRow(
                                 box(title = 'Inputs', width = 3, status = 'primary', solidHeader = TRUE,
+                                    selectInput('d3country', 'Country', c('Tanzania',
+                                                                          'Philippines')),
                                     selectInput('d3user', 'User', c('Student' = 'student',
                                                                     'Teacher' = 'teacher')),
                                     selectInput('d3metric', 'Metric', c('Hours' = 'Hours',
@@ -79,6 +85,8 @@ body <- dashboardBody(
                 tabItem(tabName = 'dashboard4',
                         fluidRow(
                                 box(title = 'Inputs', width = 3, status = 'primary', solidHeader = TRUE,
+                                    selectInput('d4country', 'Country', c('Tanzania',
+                                                                          'Philippines')),
                                     selectInput('d4user', 'User', c('Student' = 'student',
                                                                     'Teacher' = 'teacher')),
                                     dateRangeInput('d4date', 'Date Range (YYYY-MM)', format = 'yyyy-mm', start = '2016-01-01', end = today(), min = '2016-01-01', max = today()),
@@ -93,6 +101,8 @@ body <- dashboardBody(
                 tabItem(tabName = 'dashboard5',
                         fluidRow(
                                 box(title = 'Inputs', width = 3, status = 'primary', solidHeader = TRUE,
+                                    selectInput('d5country', 'Country', c('Tanzania',
+                                                                          'Philippines')),
                                     selectInput('d5user', 'User', c('Student' = 'student',
                                                                     'Teacher' = 'teacher')),
                                     selectInput('d5metric', 'Metric', c('Hours' = 'Hours',
@@ -111,8 +121,18 @@ body <- dashboardBody(
                 tabItem(tabName = 'dashboard6',
                         headerPanel(title = 'Grand Totals'),
                         fluidRow(
+                                box(title = 'Dashboard 6: Philippines Student Grand Totals', width = 10, status = 'primary', solidHeader = TRUE,
+                                    DT::dataTableOutput('d6philstudent')
+                                )
+                        ),
+                        fluidRow(
                                 box(title = 'Dashboard 6: Tanzania Student Grand Totals', width = 10, status = 'warning', solidHeader = TRUE,
                                     DT::dataTableOutput('d6tanzstudent')
+                                )
+                        ),
+                        fluidRow(
+                                box(title = 'Dashboard 6: Philippines Teacher Grand Totals', width = 10, status = 'primary', solidHeader = TRUE,
+                                    DT::dataTableOutput('d6philteacher')
                                 )
                         ),
                         fluidRow(
@@ -122,7 +142,7 @@ body <- dashboardBody(
                         ),
                         headerPanel(title = 'Latest Data'),
                         fluidRow(
-                                box(title = 'Dashboard 6: Tanzania Latest Data Collection Date', width = 10, status = 'primary', solidHeader = TRUE,
+                                box(title = 'Dashboard 6: Latest Data Collection Date', width = 10, status = 'primary', solidHeader = TRUE,
                                     DT::dataTableOutput('d6latestdata')
                                 )
                         )
@@ -155,4 +175,4 @@ body <- dashboardBody(
         )
 )
 
-dashboardPage(dashboardHeader(title = 'Reneal Dashboards TZ Only', titleWidth = '350px'), sidebar, body)
+dashboardPage(dashboardHeader(title = 'Reneal Dashboards 2.1.0', titleWidth = '260px'), sidebar, body)

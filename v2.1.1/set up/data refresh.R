@@ -1,3 +1,5 @@
+###version number: v2.1.0
+
 ###run 'reneal install packages.R' first to install required packages
 
 ###SQL pull, main data set creation, and running data preparation scripts for all 5 dashboards
@@ -124,13 +126,6 @@ write_rds(schoolweeks, path = './data/schoolweeks.rds')
 write_rds(data_creation_date, path = './data/data_creation_date.rds')
 write_rds(data_collection_date, path = './data/data_collection_date.rds')
 write_rds(latestdata, path = './data/latestdata.rds')
-
-#writing david's TZ only .rds files
-write_rds(schoolweeks, path = paste0('./Reneal Dashboard David/data/schoolweeks.rds'))
-write_rds(data_creation_date, path = paste0('./Reneal Dashboard David/data/data_creation_date.rds'))
-write_rds(data_collection_date, path = paste0('./Reneal Dashboard David/data/data_collection_date.rds'))
-write_rds(latestdata %>% filter(Country == 'Tanzania'), path = paste0('./Reneal Dashboard David/data/latestdataTZonly.rds'))
-
 
 
 ###=========================================================================
