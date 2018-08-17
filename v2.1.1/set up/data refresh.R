@@ -29,9 +29,14 @@ if(length(opencon) > 0) lapply(opencon, dbDisconnect)
 
 #connecting to "schooluse" database in MySQL server
 con<-dbConnect(RMySQL::MySQL(),
-                   host = 'localhost',
-                   user = 'root',
-                   password = askForPassword('Database password'))
+               host = ifelse(Sys.info()[['nodename']] == 'NATHANMPC',
+                             'localhost',
+                             '192.168.0.2'),
+               user = ifelse(Sys.info()[['nodename']] == 'NATHANMPC',
+                             'root',
+                             'SchoolUse'),
+               password = askForPassword('Database password'))
+
 dbSendQuery(con, 'USE schooluse')
 
 ###transfering tables from MySQL server to dataset inside R. lines that are commented out are not currently needed for dashboards
