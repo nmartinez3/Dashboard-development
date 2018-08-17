@@ -1,4 +1,4 @@
-###version number: v2.1.0
+###version number: v2.1.1
 
 ###run 'reneal install packages.R' first to install required packages
 
@@ -20,7 +20,7 @@ require(stringr)
 require(tidyr)
 require(shinydashboard)
 
-setwd(paste0('~/Reneal Dashboards/development/dashboard'))
+setwd(paste0('~/Reneal Dashboards/development/v2.1.1'))
 
 #disconnecting existing open MySQL connections (if any)
 message('SQL data import')
@@ -121,11 +121,11 @@ schoolweeks <- left_join(schoolweeks, latestdata, by = 'SchoolName') %>%
         select(-LatestData, -Country)
 
 #writing data to file
-write_rds(main, path = './main data/main.rds')
-write_rds(schoolweeks, path = './data/schoolweeks.rds')
-write_rds(data_creation_date, path = './data/data_creation_date.rds')
-write_rds(data_collection_date, path = './data/data_collection_date.rds')
-write_rds(latestdata, path = './data/latestdata.rds')
+write_rds(main, path = './set up/main data/main.rds')
+write_rds(schoolweeks, path = './deployment/data/schoolweeks.rds')
+write_rds(data_creation_date, path = './deployment/data/data_creation_date.rds')
+write_rds(data_collection_date, path = './deployment/data/data_collection_date.rds')
+write_rds(latestdata, path = './deployment/data/latestdata.rds')
 
 
 ###=========================================================================
@@ -263,49 +263,32 @@ teacherquarter <- teacherquarter %>%
 
 #writing csv files to './csv'. these files are terminal and are not referenced again
 studentquarter %>% arrange(Country, SchoolName, Year, Quarter) %>% 
-        write_csv(path = paste0('./csv/student quarterly lifetime ', today(), '.csv'))
+        write_csv(path = paste0('./deployment/csv/student quarterly lifetime ', today(), '.csv'))
 teacherquarter %>% arrange(Country, SchoolName, Year, Quarter) %>% 
-        write_csv(path = paste0('./csv/teacher quarterly lifetime ', today(), '.csv'))
+        write_csv(path = paste0('./deployment/csv/teacher quarterly lifetime ', today(), '.csv'))
 studentmonth %>% arrange(Country, SchoolName, Year, Month) %>% 
-        write_csv(path = paste0('./csv/student monthly lifetime ', today(), '.csv'))
+        write_csv(path = paste0('./deployment/csv/student monthly lifetime ', today(), '.csv'))
 teachermonth %>% arrange(Country, SchoolName, Year, Month) %>% 
-        write_csv(path = paste0('./csv/teacher monthly lifetime ', today(), '.csv'))
-
-#writing David's TZ-only .csv files for dashboard 1
-studentquarter %>% filter(Country == 'Tanzania') %>% arrange(Country, SchoolName, Year, Quarter) %>% 
-        write_csv(path = paste0('./Reneal Dashboard David/csv/TZ student quarterly lifetime ', today(), '.csv'))
-teacherquarter %>% filter(Country == 'Tanzania') %>% arrange(Country, SchoolName, Year, Quarter) %>% 
-        write_csv(path = paste0('./Reneal Dashboard David/csv/TZ teacher quarterly lifetime ', today(), '.csv'))
-studentmonth %>% filter(Country == 'Tanzania') %>% arrange(Country, SchoolName, Year, Month) %>% 
-        write_csv(path = paste0('./Reneal Dashboard David/csv/TZ student monthly lifetime ', today(), '.csv'))
-teachermonth %>% filter(Country == 'Tanzania') %>% arrange(Country, SchoolName, Year, Month) %>% 
-        write_csv(path = paste0('./Reneal Dashboard David/csv/TZ teacher monthly lifetime ', today(), '.csv'))
+        write_csv(path = paste0('./deployment/csv/teacher monthly lifetime ', today(), '.csv'))
 
 #writing month-year combinations w/ Inf for per week metrics to './csv' (if any)
 if(nrow(student_inf_rows) > 0){
         message('...Writing student_inf_rows csv file to "./csv" folder')
-        student_inf_rows %>% arrange(Country, SchoolName, Year, Month) %>% write_csv(path = paste0('./csv/student_inf_rows ', today(), '.csv'))
+        student_inf_rows %>% arrange(Country, SchoolName, Year, Month) %>% write_csv(path = paste0('./deployment/csv/student_inf_rows ', today(), '.csv'))
 }
 if(nrow(teacher_inf_rows) > 0){
         message('...Writing teacher_inf_rows csv file to "./csv" folder')
-        teacher_inf_rows %>% arrange(Country, SchoolName, Year, Month) %>% write_csv(path = paste0('./csv/teacher_inf_rows ', today(), '.csv'))
+        teacher_inf_rows %>% arrange(Country, SchoolName, Year, Month) %>% write_csv(path = paste0('./deployment/csv/teacher_inf_rows ', today(), '.csv'))
 }
 
 #writing rds files to './data'. these files are referenced by the shiny app
-write_rds(studentquarter, path = './data/d1studentquarter.rds')
-write_rds(studentmonth, path = './data/d1studentmonth.rds')
-write_rds(teacherquarter, path = './data/d1teacherquarter.rds')
-write_rds(teachermonth, path = './data/d1teachermonth.rds')
-
-#writing David's TZ-only .rds files
-write_rds(studentquarter %>% filter(Country == 'Tanzania'), path = paste0('./Reneal Dashboard David/data/d1studentquarterTZonly.rds'))
-write_rds(studentmonth %>% filter(Country == 'Tanzania'), path = paste0('./Reneal Dashboard David/data/d1studentmonthTZonly.rds'))
-write_rds(teacherquarter %>% filter(Country == 'Tanzania'), path = paste0('./Reneal Dashboard David/data/d1teacherquarterTZonly.rds'))
-write_rds(teachermonth %>% filter(Country == 'Tanzania'), path = paste0('./Reneal Dashboard David/data/d1teachermonthTZonly.rds'))
+write_rds(studentquarter, path = './deployment/data/d1studentquarter.rds')
+write_rds(studentmonth, path = './deployment/data/d1studentmonth.rds')
+write_rds(teacherquarter, path = './deployment/data/d1teacherquarter.rds')
+write_rds(teachermonth, path = './deployment/data/d1teachermonth.rds')
 
 #cleaning workspace
 rm(student_inf_rows, teacher_inf_rows)
-
 
 
 ###-------------------------------------------------------------------------
@@ -339,12 +322,8 @@ d2teacher <- d2teacher %>%
         ungroup()
 
 #writing .rds data files
-write_rds(d2teacher, path = './data/d2teacher.rds')
-write_rds(d2student, path = './data/d2student.rds')
-
-write_rds(d2teacher %>% filter(Country == 'Tanzania'), path = paste0('./Reneal Dashboard David/data/d2teacherTZ.rds'))
-write_rds(d2student %>% filter(Country == 'Tanzania'), path = paste0('./Reneal Dashboard David/data/d2studentTZ.rds'))
-
+write_rds(d2teacher, path = './deployment/data/d2teacher.rds')
+write_rds(d2student, path = './deployment/data/d2student.rds')
 
 
 ###-------------------------------------------------------------------------
@@ -380,12 +359,8 @@ d3teacher <- d3teacher %>%
         ungroup()
 
 #writing .rds data files
-write_rds(d3teacher, path = './data/d3teacher.rds')
-write_rds(d3student, path = './data/d3student.rds')
-
-write_rds(d3teacher %>% filter(Country == 'Tanzania'), path = paste0('./Reneal Dashboard David/data/d3teacherTZ.rds'))
-write_rds(d3student %>% filter(Country == 'Tanzania'), path = paste0('./Reneal Dashboard David/data/d3studentTZ.rds'))
-
+write_rds(d3teacher, path = './deployment/data/d3teacher.rds')
+write_rds(d3student, path = './deployment/data/d3student.rds')
 
 
 ###-------------------------------------------------------------------------
@@ -409,12 +384,8 @@ d4teacher <- main %>%
         ungroup()
 
 #writing .rds data files
-write_rds(d4teacher, path = './data/d4teacher.rds')
-write_rds(d4student, path = './data/d4student.rds')
-
-write_rds(d4teacher %>% filter(Country == 'Tanzania'), path = paste0('./Reneal Dashboard David/data/d4teacherTZ.rds'))
-write_rds(d4student %>% filter(Country == 'Tanzania'), path = paste0('./Reneal Dashboard David/data/d4studentTZ.rds'))
-
+write_rds(d4teacher, path = './deployment/data/d4teacher.rds')
+write_rds(d4student, path = './deployment/data/d4student.rds')
 
 
 ###-------------------------------------------------------------------------
@@ -449,12 +420,8 @@ d5teacher <- d5teacher %>%
         ungroup()
 
 #writing .rds data files
-write_rds(d5teacher, path = './data/d5teacher.rds')
-write_rds(d5student, path = './data/d5student.rds')
-
-write_rds(d5teacher %>% filter(Country == 'Tanzania'), path = paste0('./Reneal Dashboard David/data/d5teacherTZ.rds'))
-write_rds(d5student %>% filter(Country == 'Tanzania'), path = paste0('./Reneal Dashboard David/data/d5studentTZ.rds'))
-
+write_rds(d5teacher, path = './deployment/data/d5teacher.rds')
+write_rds(d5student, path = './deployment/data/d5student.rds')
 
 
 ###-------------------------------------------------------------------------
@@ -583,13 +550,11 @@ philteacheryearly <- philteachertotals %>%
 philteachertotals <- bind_rows(philteacherlifetime, philteacheryearly)
 
 #writing .rds files
-write_rds(philstudenttotals, path = './data/d6philstudent.rds')
-write_rds(philteachertotals, path = './data/d6philteacher.rds')
-write_rds(tanzstudenttotals, path = './data/d6tanzstudent.rds')
-write_rds(tanzteachertotals, path = './data/d6tanzteacher.rds')
+write_rds(philstudenttotals, path = './deployment/data/d6philstudent.rds')
+write_rds(philteachertotals, path = './deployment/data/d6philteacher.rds')
+write_rds(tanzstudenttotals, path = './deployment/data/d6tanzstudent.rds')
+write_rds(tanzteachertotals, path = './deployment/data/d6tanzteacher.rds')
 
-write_rds(tanzstudenttotals, path = paste0('./Reneal Dashboard David/data/d6tanzstudent.rds'))
-write_rds(tanzteachertotals, path = paste0('./Reneal Dashboard David/data/d6tanzteacher.rds'))
 
 ###-------------------------------------------------------------------------
 ###Dashboard 7 data prep
@@ -616,11 +581,9 @@ d7schoolnames <- sort(unique(d7$SchoolName))
 d7schoolnamesTZ <- sort(unique(d7$SchoolName[d7$Country == 'Tanzania']))
 
 #writing data files
-write_rds(d7, path = './data/d7.rds')
-write_rds(d7schoolnames, path = './data/d7schoolnames.rds')
+write_rds(d7, path = './deployment/data/d7.rds')
+write_rds(d7schoolnames, path = './deployment/data/d7schoolnames.rds')
 
-write_rds(d7 %>% filter(Country == 'Tanzania'), path = paste0('./Reneal Dashboard David/data/d7TZonly.rds'))
-write_rds(d7schoolnamesTZ, path = paste0('./Reneal Dashboard David/data/d7schoolnamesTZ.rds'))
 
 ###-------------------------------------------------------------------------
 ###Auto scaling calculations
@@ -657,9 +620,7 @@ plot_height_TZ <- list(
         'd7' = plot_height_d7_TZ
 )
 
-write_rds(plot_height, path = './data/plot_height.rds')
-write_rds(plot_height_TZ, path = paste0('./Reneal Dashboard David/data/plot_height_TZ.rds'))
-
+write_rds(plot_height, path = './deployment/data/plot_height.rds')
 
 
 ###=========================================================================
