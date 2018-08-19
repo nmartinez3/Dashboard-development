@@ -37,17 +37,32 @@ con<-dbConnect(RMySQL::MySQL(),
                              'SchoolUse'),
                password = askForPassword('Database password'))
 
-dbSendQuery(con, 'USE schooluse')
+if(Sys.info()[['nodename']] == 'NATHANMPC'){
+        dbSendQuery(con, 'USE schooluse')
+}else{
+        dbSendQuery(con, 'USE SchoolUse')
+}
+
 
 ###transfering tables from MySQL server to dataset inside R. lines that are commented out are not currently needed for dashboards
 #clientcomputers <- tbl(con, 'clientcomputers') %>% collect()
 #clientresourceuse <- tbl(con, 'clientresourceuse') %>% collect()
 #cpuuse <- tbl(con, 'cpuuse') %>% collect()
 #memoryuse <- tbl(con, 'memoryuse') %>% collect()
-school <- tbl(con, 'school') %>% collect()
-summarydata <- tbl(con, 'summarydata') %>% collect()
-users <- tbl(con, 'users') %>% collect()
-usersloggedin <- tbl(con, 'usersloggedin') %>% collect()
+
+
+if(Sys.info()[['nodename']] == 'NATHANMPC'){
+        school <- tbl(con, 'school') %>% collect()
+        summarydata <- tbl(con, 'summarydata') %>% collect()
+        users <- tbl(con, 'users') %>% collect()
+        usersloggedin <- tbl(con, 'usersloggedin') %>% collect()
+}else{
+        school <- tbl(con, 'School') %>% collect()
+        summarydata <- tbl(con, 'SummaryData') %>% collect()
+        users <- tbl(con, 'Users') %>% collect()
+        usersloggedin <- tbl(con, 'UsersLoggedIn') %>% collect()
+}
+
 
 #data build date
 data_creation_date <- today()
