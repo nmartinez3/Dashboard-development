@@ -4,9 +4,11 @@ Run the dashboard: https://nmartinez3.shinyapps.io/deployment/
 
 Yeah!!!
 
-## What is this?
+(if for whatever reason the link is not working, please email me! n_martinez3@u.pacific.edu . thank you so much!)
 
-This is a dashboard that I made for a non-profit that takes old computers from the US and installs them in computer labs in the Philippines and Tanzania.
+# What is this?
+
+This is a dashboard that I made for a non-profit that takes old computers from the US and installs them in computer labs in the Philippines and Tanzania. Read below for more information about why it was created (and what problems it solved for the non-profit), how I created it and what was involved on the technical side, and other things I learned from the project. Thanks for your time!
 
 # Business motivation
 
