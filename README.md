@@ -1,21 +1,18 @@
-# Read me!
-Hey guys! In this repository is a dashboard I created for a non-profit that sources old computers from the US destined for the junk bin and takes them to schools in Tanzania and the Philippines to be set up as computer labs for students there.
+# Run the dashboard yourself!!!
 
-### The dashboard (run it yourself!):
-The dashboard can be found in its entirety in the v2.X.X/deployment/ folder. To run the dashboard yourself (the most recent version with the full data set!), do the following:
-1) Make sure both R and R Studio are installed on your machine
-2) Download the entire "deployment" folder as is (it can be placed anywhere on your machine; does not need to be downloaded to a certain location)
-3) Open up either 'ui.R' or 'server.R' in R Studio (either one works fine)
-4) Click the 'Run App' button in the top-right corner of the script editing area
-5) Play around and have fun!
+Run the dashboard: https://nmartinez3.shinyapps.io/deployment/
 
-Below I'll talk about the business needs and the project in a little more detail (as well as including screenshots of the dashboard).
+Yeah!!!
 
-### The business needs and the dashboard
-So basically, the non-profit had a ton of SQL data that was being collected on each active computer for every second that each computer was in use (~470 computers total currently), and they wanted to look at all of this usage data and use it to understand which schools were taking greater advantage of their computer labs relative to others. However, the non-profit was trying to do this analysis with excel files at the time, and the process was messy, took a lot of time out of the non-profit owners' schedules, and did not offer the full dimensionality and filtering options that they wanted to be able to visualize the data thoroughly and with different views over time. To solve this problem, I worked with the non-profit to define an initial series of 5 dashboards (all contained within the same Shiny app; eventually grew to 7 dashboards in total, again in the same Shiny app) and created them in R with Shiny.
+## What is this?
 
-#### Data flow
-To create the app, I took a dump (terrible, I know) of the non-profit's SQL data onto my own machine and into my own instance of MySQL (to replicate the work setup they would be operating with) and then built an R data prep script to connect to the SQL server, pull in all of the relevant data, process it and prepare it into the right format for the dashboards, and then write the data for the dashboard as .rds files into the directory where the Shiny app was to be located. The Shiny app was created in conjunction with the data prep script. Feel free to look at the code for 'ui.R' and 'server.R' for the app/dashboard code and 'data refresh.R' for the data prep script's code.
+This is a dashboard that I made for a non-profit that takes old computers from the US and installs them in computer labs in the Philippines and Tanzania.
 
-#### Quick Overview of Each Dashboard
-Coming soon!
+# Business motivation
+
+The non-profit had tons of computer usage data for all of their schools in an SQL database they were maintaining, and they wanted to look at the data to understand which schools were taking greater advantage of the system, which were taking less, which were abusing the system (extremely high teacher use with low student use, meaning teacher is hanging out on the computers all the time but students aren't taking advantage of the computer lab), and how their different usage metrics were changing over time. To do this, the non-profit was using excel spreadsheets to generate graphs of the data coming out of the SQL database, but it was super clunky, took lots of time to tweak and maintain each time the graphs were generated, couldn't visualize all of the views they wanted of the data, and didn't make it possible to have all of their visualizations in one place, all with the same 5 metrics they were interested, and all with the same user input filters to control the output of the visualizations (hmmm that sounds like some of the specs for my dashboard!). Basically, their existing system took a lot of time and didn't give them the desired level of insight/multi-dimensionality they wanted for viewing their data.
+
+# The dashboard
+
+So, to solve this issue, I sat down with the non-profit cofounders at the beginning of this year (Dec 2017/Jan 2018) to understand the issues they were having and what they really wanted if they could have a dream visualization suite with all of the views and metrics they desired. We settled on an initial 5 dashboards (all to be contained in the same Shiny app - this expanded to 7 in total over time), each covering a different view and including different user-selectable filters. I'll give a quick rundown of each dashboard below (including all 7 that are currently in the dashboard) as well as the data processing that was involved to take the data from SQL and prepare it in R for use in the Shiny app. At the end of the write-up, I'll give a description of some of the challenges I faced with this project, what I learned from them, and other code highlights for this project. I'm currently looking for a job as a data analyst in a for-profit company, so if this readme file is unfinished when you come to visit it, I apologize about that and you have my word that I will resume working on it when I find the time. Thanks for reading!
+
