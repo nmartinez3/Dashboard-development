@@ -91,7 +91,17 @@ shinyServer(function(input, output, session) {
                 }, height = plot_height[[paste(input$d1country, input$d1user, sep = '_')]])
         })
         
-        ############################
+        #writing .csv files to /csv directory
+        write_csv(d1studentmonth %>% arrange(Country, SchoolName, Year, Month), 
+                  path = paste0('./csv/student monthly lifetime ', data_creation_date, '.csv'))
+        write_csv(d1studentquarter %>% arrange(Country, SchoolName, Year, Quarter), 
+                  path = paste0('./csv/student quarterly lifetime ', data_creation_date, '.csv'))
+        write_csv(d1teachermonth %>% arrange(Country, SchoolName, Year, Month), 
+                  path = paste0('./csv/teacher monthly lifetime ', data_creation_date, '.csv'))
+        write_csv(d1teacherquarter %>% arrange(Country, SchoolName, Year, Quarter), 
+                  path = paste0('./csv/teacher quarterly lifetime ', data_creation_date, '.csv'))
+
+                ############################
         ###Dashboard 2
         
         observe({

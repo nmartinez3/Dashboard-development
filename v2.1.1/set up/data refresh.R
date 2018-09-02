@@ -281,16 +281,6 @@ teacherquarter <- teacherquarter %>%
                HoursWeek = Hours/Weeks,
                UserHoursWeek = UserHours/Weeks)
 
-#writing csv files to './csv'. these files are terminal and are not referenced again
-studentquarter %>% arrange(Country, SchoolName, Year, Quarter) %>% 
-        write_csv(path = paste0('./deployment/csv/student quarterly lifetime ', today(), '.csv'))
-teacherquarter %>% arrange(Country, SchoolName, Year, Quarter) %>% 
-        write_csv(path = paste0('./deployment/csv/teacher quarterly lifetime ', today(), '.csv'))
-studentmonth %>% arrange(Country, SchoolName, Year, Month) %>% 
-        write_csv(path = paste0('./deployment/csv/student monthly lifetime ', today(), '.csv'))
-teachermonth %>% arrange(Country, SchoolName, Year, Month) %>% 
-        write_csv(path = paste0('./deployment/csv/teacher monthly lifetime ', today(), '.csv'))
-
 #writing month-year combinations w/ Inf for per week metrics to './csv' (if any)
 if(nrow(student_inf_rows) > 0){
         message('...Writing student_inf_rows csv file to "./csv" folder')
