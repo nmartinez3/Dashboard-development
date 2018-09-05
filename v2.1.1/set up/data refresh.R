@@ -456,7 +456,7 @@ d6philweeks <- schoolweeks %>%
 ###student grand totals
 tanzstudenttotals <- main %>%
         filter(ActiveStudentCount >= 1 & Country == 'Tanzania') %>%
-        group_by(Year, Time) %>%
+        group_by(SchoolName, Year, Time) %>%
         summarise(Minutes = 1,
                   UserMin = mean(ActiveStudentCount))
 tanzstudenttotals <- tanzstudenttotals %>%
@@ -482,7 +482,7 @@ tanzstudenttotals <- bind_rows(tanzstudentlifetime, tanzstudentyearly)
 
 philstudenttotals <- main %>%
         filter(ActiveStudentCount >= 1 & Country == 'Philippines') %>%
-        group_by(Year, Time) %>%
+        group_by(SchoolName, Year, Time) %>%
         summarise(Minutes = 1,
                   UserMin = mean(ActiveStudentCount))
 philstudenttotals <- philstudenttotals %>%
@@ -509,7 +509,7 @@ philstudenttotals <- bind_rows(philstudentlifetime, philstudentyearly)
 ###teacher grand totals
 tanzteachertotals <- main %>%
         filter(ActiveTeacherCount >= 1 & Country == 'Tanzania') %>%
-        group_by(Year, Time) %>%
+        group_by(SchoolName, Year, Time) %>%
         summarise(Minutes = 1,
                   UserMin = mean(ActiveTeacherCount))
 tanzteachertotals <- tanzteachertotals %>%
@@ -535,7 +535,7 @@ tanzteachertotals <- bind_rows(tanzteacherlifetime, tanzteacheryearly)
 
 philteachertotals <- main %>%
         filter(ActiveTeacherCount >= 1 & Country == 'Philippines') %>%
-        group_by(Year, Time) %>%
+        group_by(SchoolName, Year, Time) %>%
         summarise(Minutes = 1,
                   UserMin = mean(ActiveTeacherCount))
 philteachertotals <- philteachertotals %>%
