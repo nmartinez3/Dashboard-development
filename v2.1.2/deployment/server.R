@@ -1,4 +1,4 @@
-###version number: v2.1.1
+###version number: v2.1.2
 
 ###run 'data refresh.R' first to prepare data sets used by this app
 

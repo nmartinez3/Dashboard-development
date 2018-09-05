@@ -1,4 +1,4 @@
-###version number: v2.1.1
+###version number: v2.1.2
 
 ###run 'reneal install packages.R' first to install required packages
 
