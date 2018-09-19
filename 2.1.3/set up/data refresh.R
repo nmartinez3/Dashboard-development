@@ -1,4 +1,4 @@
-###version number: v2.1.2
+###version number: 2.1.3
 
 ###run 'reneal install packages.R' first to install required packages
 
@@ -20,7 +20,13 @@ require(stringr)
 require(tidyr)
 require(shinydashboard)
 
-setwd(paste0('~/Reneal Dashboards/development/v2.1.1'))
+version_number <- '2.1.3'
+
+if(Sys.info()[['nodename']] == 'NATHANMPC'){
+        setwd(paste0('~/Reneal Dashboards/development/', version_number))
+}else{
+        setwd(paste0('~/Reneal Dashboards/', version_number))
+}
 
 #disconnecting existing open MySQL connections (if any)
 message('SQL data import')
