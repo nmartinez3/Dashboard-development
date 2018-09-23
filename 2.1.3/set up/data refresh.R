@@ -41,7 +41,9 @@ con<-dbConnect(RMySQL::MySQL(),
                user = ifelse(Sys.info()[['nodename']] == 'NATHANMPC',
                              'root',
                              'SchoolUse'),
-               password = askForPassword('Database password'))
+               password = ifelse(Sys.info()[['nodename']] == 'NATHANMPC',
+                                 read_file('~/Reneal Dashboards/development/key.txt'),
+                                 askForPassword('Database password')))
 
 if(Sys.info()[['nodename']] == 'NATHANMPC'){
         dbSendQuery(con, 'USE schooluse')
