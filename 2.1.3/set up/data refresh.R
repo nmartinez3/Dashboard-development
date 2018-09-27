@@ -1,6 +1,9 @@
 ###version number: 2.1.3
 
-###run 'reneal install packages.R' first to install required packages
+###run 'first time package install.R' first to install required packages
+
+# timer
+tic('new 2')
 
 ###SQL pull, main data set creation, and running data preparation scripts for all 5 dashboards
 #clearing workspace
@@ -61,7 +64,7 @@ if(Sys.info()[['nodename']] == 'NATHANMPC'){
 
 if(Sys.info()[['nodename']] == 'NATHANMPC'){
         school <- tbl(con, 'school') %>% collect()
-        summarydata <- tbl(con, 'summarydata') %>% collect()
+        summarydata <- dbGetQuery(con, 'SELECT * FROM summarydata WHERE ActiveTeacherCount >= 1 OR ActiveStudentCount >= 1')
         users <- tbl(con, 'users') %>% collect()
         usersloggedin <- tbl(con, 'usersloggedin') %>% collect()
 }else{
@@ -155,6 +158,9 @@ write_rds(data_creation_date, path = './deployment/data/data_creation_date.rds')
 write_rds(data_collection_date, path = './deployment/data/data_collection_date.rds')
 write_rds(latestdata, path = './deployment/data/latestdata.rds')
 
+#splitting main into main_student and main_teacher to reduce calling the same command over and over during dashboard data preparation
+main_student <- main %>% filter(ActiveStudentCount >= 1)
+main_teacher <- main %>% filter(ActiveTeacherCount >= 1)
 
 ###=========================================================================
 ###  Version 2.0 architectural changes below this line (most dashboard data 
@@ -643,6 +649,8 @@ write_rds(plot_height, path = './deployment/data/plot_height.rds')
 
 ###=========================================================================
 
+# timer
+toc()
 
 #done!
 message('Done!')
