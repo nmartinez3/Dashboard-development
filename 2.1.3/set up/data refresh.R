@@ -2,9 +2,6 @@
 
 ###run 'first time package install.R' first to install required packages
 
-# timer
-tic('new 2')
-
 ###SQL pull, main data set creation, and running data preparation scripts for all 5 dashboards
 #clearing workspace
 rm(list=ls())
@@ -157,10 +154,6 @@ write_rds(schoolweeks, path = './deployment/data/schoolweeks.rds')
 write_rds(data_creation_date, path = './deployment/data/data_creation_date.rds')
 write_rds(data_collection_date, path = './deployment/data/data_collection_date.rds')
 write_rds(latestdata, path = './deployment/data/latestdata.rds')
-
-#splitting main into main_student and main_teacher to reduce calling the same command over and over during dashboard data preparation
-main_student <- main %>% filter(ActiveStudentCount >= 1)
-main_teacher <- main %>% filter(ActiveTeacherCount >= 1)
 
 ###=========================================================================
 ###  Version 2.0 architectural changes below this line (most dashboard data 
