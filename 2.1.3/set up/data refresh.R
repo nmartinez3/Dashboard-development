@@ -61,7 +61,7 @@ if(Sys.info()[['nodename']] == 'NATHANMPC'){
 
 if(Sys.info()[['nodename']] == 'NATHANMPC'){
         school <- tbl(con, 'school') %>% collect()
-        summarydata <- dbGetQuery(con, 'SELECT * FROM summarydata WHERE ActiveTeacherCount >= 1 OR ActiveStudentCount >= 1')
+        summarydata <- tbl(con, 'summarydata') %>% collect()
         users <- tbl(con, 'users') %>% collect()
         usersloggedin <- tbl(con, 'usersloggedin') %>% collect()
 }else{
@@ -641,9 +641,6 @@ write_rds(plot_height, path = './deployment/data/plot_height.rds')
 
 
 ###=========================================================================
-
-# timer
-toc()
 
 #done!
 message('Done!')
