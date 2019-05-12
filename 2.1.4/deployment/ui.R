@@ -1,4 +1,4 @@
-###version number: 2.1.3
+###version number: 2.1.4
 
 ###run 'data refresh.R' first to prepare data sets used by this app
 
@@ -34,6 +34,7 @@ body <- dashboardBody(
                                     selectInput('d1metric', 'Metric', c('Hours' = 'Hours',
                                                                         'User Hours' = 'UserHours',
                                                                         'Average Users' = 'AverageUsers',
+                                                                        'Max Users' = 'MaxUsers',
                                                                         'Hours per Week' = 'HoursWeek',
                                                                         'User Hours per Week' = 'UserHoursWeek'))
                                 ),
@@ -175,4 +176,4 @@ body <- dashboardBody(
         )
 )
 
-dashboardPage(dashboardHeader(title = 'Reneal Dashboards 2.1.3', titleWidth = '260px'), sidebar, body)
+dashboardPage(dashboardHeader(title = 'Reneal Dashboards 2.1.4', titleWidth = '260px'), sidebar, body)

@@ -1,4 +1,4 @@
-###version number: 2.1.3
+###version number: 2.1.4
 
 ###run 'first time package install.R' first to install required packages
 
@@ -20,7 +20,7 @@ require(stringr)
 require(tidyr)
 require(shinydashboard)
 
-version_number <- '2.1.3'
+version_number <- '2.1.4'
 
 if(Sys.info()[['nodename']] == 'NATHANMPC'){
         setwd(paste0('~/Reneal Dashboards/development/', version_number))
@@ -178,11 +178,13 @@ validweeksmonth <- schoolweeks %>%
 studentmonth <- main %>% filter(ActiveStudentCount >= 1) %>%
         group_by(SchoolName, Country, Year, Month, YearMonth, Time) %>% 
         summarise(Minutes = 1,
-                  UserMin = mean(ActiveStudentCount))
+                  UserMin = mean(ActiveStudentCount),
+                  MaxUsers = max(ActiveStudentCount))
 studentmonth <- studentmonth %>%
         group_by(SchoolName, Country, Year, Month, YearMonth) %>%
         summarise(Hours = sum(Minutes)/60,
-                  UserHours = sum(UserMin)/60)
+                  UserHours = sum(UserMin)/60,
+                  MaxUsers = max(MaxUsers))
 
 #adding per week metrics
 studentmonth <- studentmonth %>% 
@@ -213,11 +215,13 @@ if(nrow(student_inf_rows) > 0){
 teachermonth <- main %>% filter(ActiveTeacherCount >= 1) %>%
         group_by(SchoolName, Country, Year, Month, YearMonth, Time) %>% 
         summarise(Minutes = 1,
-                  UserMin = mean(ActiveTeacherCount))
+                  UserMin = mean(ActiveTeacherCount),
+                  MaxUsers = max(ActiveTeacherCount))
 teachermonth <- teachermonth %>%
         group_by(SchoolName, Country, Year, Month, YearMonth) %>%
         summarise(Hours = sum(Minutes)/60,
-                  UserHours = sum(UserMin)/60)
+                  UserHours = sum(UserMin)/60,
+                  MaxUsers = max(MaxUsers))
 
 #adding per week metrics
 teachermonth <- teachermonth %>% 
@@ -258,11 +262,13 @@ validweeksquarter <- schoolweeks %>%
 studentquarter <- main %>% filter(ActiveStudentCount >= 1) %>%
         group_by(SchoolName, Country, Year, Quarter, YearQuarter, Time) %>% 
         summarise(Minutes = 1,
-                  UserMin = mean(ActiveStudentCount))
+                  UserMin = mean(ActiveStudentCount),
+                  MaxUsers = max(ActiveStudentCount))
 studentquarter <- studentquarter %>% 
         group_by(SchoolName, Country, Year, Quarter, YearQuarter) %>%
         summarise(Hours = sum(Minutes)/60,
-                  UserHours = sum(UserMin)/60)
+                  UserHours = sum(UserMin)/60,
+                  MaxUsers = max(MaxUsers))
 
 #adding per week metrics
 studentquarter <- studentquarter %>% left_join(validweeksquarter, by = c('SchoolName', 'Year', 'Quarter')) 
@@ -275,11 +281,13 @@ studentquarter <- studentquarter %>%
 teacherquarter <- main %>% filter(ActiveTeacherCount >= 1) %>%
         group_by(SchoolName, Country, Year, Quarter, YearQuarter, Time) %>% 
         summarise(Minutes = 1,
-                  UserMin = mean(ActiveTeacherCount))
+                  UserMin = mean(ActiveTeacherCount),
+                  MaxUsers = max(ActiveTeacherCount))
 teacherquarter <- teacherquarter %>% 
         group_by(SchoolName, Country, Year, Quarter, YearQuarter) %>%
         summarise(Hours = sum(Minutes)/60,
-                  UserHours = sum(UserMin)/60)
+                  UserHours = sum(UserMin)/60,
+                  MaxUsers = max(MaxUsers))
 
 #adding per week metrics
 teacherquarter <- teacherquarter %>% left_join(validweeksquarter, by = c('SchoolName', 'Year', 'Quarter')) 
