@@ -1,4 +1,4 @@
-###version number: 2.1.4
+###version number: 2.1.5
 
 ###run 'first time package install.R' first to install required packages
 
@@ -20,7 +20,7 @@ require(stringr)
 require(tidyr)
 require(shinydashboard)
 
-version_number <- '2.1.4'
+version_number <- '2.1.5'
 
 if(Sys.info()[['nodename']] == 'NATHANMPC'){
         setwd(paste0('~/Reneal Dashboards/development/', version_number))

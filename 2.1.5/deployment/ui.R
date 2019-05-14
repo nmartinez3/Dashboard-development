@@ -1,4 +1,4 @@
-###version number: 2.1.4
+###version number: 2.1.5
 
 ###run 'data refresh.R' first to prepare data sets used by this app
 
@@ -176,4 +176,4 @@ body <- dashboardBody(
         )
 )
 
-dashboardPage(dashboardHeader(title = 'Reneal Dashboards 2.1.4', titleWidth = '260px'), sidebar, body)
+dashboardPage(dashboardHeader(title = 'Reneal Dashboards 2.1.5', titleWidth = '260px'), sidebar, body)
