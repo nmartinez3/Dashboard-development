@@ -10,4 +10,4 @@ This is a dashboard built for Reneal IEO (a non-profit installing computer labs 
 
 For more information on Reneal IEO, check out their website - https://www.reneal.org/
 
-If you have old laptops you can donate - we can always use more! We're a 501(c)(3) non-profit, so your laptop donations are tax-deductible. Please shoot an email to nathan.martinez672@gmail.com and I'll be happy to get back to you!
+If you have old laptops you can donate - we can always use more! We're a 501(c)(3) non-profit, so your laptop donations are tax-deductible. Please shoot an email to nathan.martinez672@gmail.com and I'll be happy to get back to you! Thank you!!
